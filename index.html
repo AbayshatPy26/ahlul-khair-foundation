@@ -1,4 +1,15 @@
-<title>Ahlul Khair Foundation</title>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0B4A2C">
+<meta name="description" content="Register for Ahlul Khair Foundation's online part-time and full-time programs: Arabic Literacy, Qur'an Recitation with good tajweed, Quranic Memorization and Fiqihu. Special classes for adults and children.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Ahlul Khair Foundation — Online Class Registration">
+<meta property="og:description" content="Register for Ahlul Khair Foundation's online part-time and full-time programs: Arabic Literacy, Qur'an Recitation with good tajweed, Quranic Memorization and Fiqihu. Special classes for adults and children.">
+<title>Ahlul Khair Foundation — Online Class Registration</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Crect%20width%3D%2764%27%20height%3D%2764%27%20rx%3D%2713%27%20fill%3D%27%230B4A2C%27%2F%3E%3Cpath%20d%3D%27M41%2023a11.5%2011.5%200%201%201-11.9-11.5%209%209%200%201%200%2011.9%2011.5z%27%20fill%3D%27%23D4AF37%27%2F%3E%3C%2Fsvg%3E">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Playfair+Display:ital,wght@1,500;1,600&family=Work+Sans:wght@400;500;600;700&display=swap">
 <style>
   :root{
@@ -355,7 +366,8 @@
   }
   @media (prefers-reduced-motion: reduce){*{transition:none !important;}}
 </style>
-
+</head>
+<body>
 <div class="wrap">
 
   <!-- ===================== FLYER HEADER ===================== -->
@@ -1194,6 +1206,21 @@
     renderDashboard();
   }
 
+  var FILE_NAME = "ahlul-khair-registrations.csv";
+
+  function browserDownload(csv){
+    try{
+      var blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = url; a.download = FILE_NAME;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+    }catch(e){}
+  }
+
   function exportCsv(){
     var cols = ["fullName","category","age","gender","country","timezone","language","programs",
                 "programType","level","contactName","relationship","email","phone","contactMethod",
@@ -1212,11 +1239,14 @@
     }
     var csv = lines.join("\n");
 
-    if(!window.claude || !claude.use){ return; }
-    claude.use("downloads").then(function(downloads){
-      if(!downloads){ return; }
-      return downloads.save({filename:"ahlul-khair-registrations.csv", data:csv});
-    })["catch"](function(){ /* viewer declined or unavailable */ });
+    if(window.claude && claude.use){
+      claude.use("downloads").then(function(downloads){
+        if(downloads){ return downloads.save({filename:FILE_NAME, data:csv}); }
+        browserDownload(csv);
+      })["catch"](function(){ /* viewer declined */ });
+    }else{
+      browserDownload(csv);
+    }
   }
 
   /* prefill the detected time zone as a helpful placeholder */
@@ -1225,3 +1255,5 @@
     if(tz){ document.getElementById("f-timezone").placeholder = "e.g. Your city, " + tz; }
   }catch(e){}
 </script>
+</body>
+</html>
