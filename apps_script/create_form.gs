@@ -23,7 +23,9 @@ function createAhlulKhairForm() {
     "Quranic Memorization · Fiqihu (Islamic Jurisprudence).\n\n" +
     "We provide special classes for adults and children to learn on their paces.\n" +
     "Connect Muslim with Quran Every Where You Go.\n\n" +
-    "Phone / WhatsApp: +234702633370"
+    "Phone / WhatsApp: +234702633370
+" +
+    "Email: ahlulkhairfoundation@gmail.com"
   );
   form.setCollectEmail(true);
   form.setConfirmationMessage(

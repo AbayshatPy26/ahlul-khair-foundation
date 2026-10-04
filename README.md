@@ -25,8 +25,9 @@ and no sign-in needed. Share that link on WhatsApp, Facebook or by SMS.
 
 The form has no server. When someone submits it, the app builds their
 full details into a WhatsApp message addressed to **+234702633370** and
-shows a *Send on WhatsApp* button, with a *copy my details* fallback.
-The registration arrives in the foundation's WhatsApp chat.
+shows a *Send on WhatsApp* button. A *Send by Email* button does the
+same thing by email to **ahlulkhairfoundation@gmail.com**, and there is a
+*copy my details* fallback if neither opens.
 
 A copy is also saved in that person's own browser only — it is not sent
 anywhere else and the foundation cannot read it.
@@ -53,6 +54,6 @@ link automatically within a minute or two.
 ## Contact
 
 - Phone / WhatsApp: **+234702633370**
-- Gmail: **ahlulkhairfoundation.com**
+- Email: **ahlulkhairfoundation@gmail.com**
 
 *Connect Muslim with Quran Every Where You Go.*
