@@ -1,37 +1,48 @@
 /**
- * Creates the "Noor Qur'an Academy — Student Registration" Google Form
+ * Creates the "Ahlul Khair Foundation — Online Class Registration" Google Form
  * in YOUR Google Drive, with a linked Google Sheet for responses.
+ *
+ * Programs taught (from the foundation flyer):
+ *   Arabic Literacy · Learning Qur'an Recitation (with good tajweed)
+ *   Quranic Memorization · Fiqihu (Islamic Jurisprudence)
+ * Part-time & full-time, for adults and children.
  *
  * HOW TO RUN
  * 1. Go to https://script.google.com -> New project.
  * 2. Delete the placeholder code and paste this whole file in.
- * 3. Click "Run" (the play button) on the createNoorAcademyForm function.
- * 4. The first run asks you to authorize the script against your own
- *    Google account — click through "Advanced" -> "Go to project (unsafe)"
- *    if prompted (this warning appears for any script you haven't
- *    published, including your own).
- * 5. Open View -> Logs (or Executions) to get the form's edit link,
- *    share link, and the linked responses spreadsheet link.
+ * 3. Click "Run" (the play button) on the createAhlulKhairForm function.
+ * 4. Authorize it against your own Google account when prompted.
+ * 5. Open Executions / Logs to get the form's edit link, the public share
+ *    link to send to people, and the responses spreadsheet link.
  */
-function createNoorAcademyForm() {
-  var form = FormApp.create("Noor Qur'an Academy — Student Registration");
+function createAhlulKhairForm() {
+  var form = FormApp.create("Ahlul Khair Foundation — Online Class Registration");
   form.setDescription(
-    "Register your child for virtual Qur'an and Islamic studies lessons. " +
-    "A coordinator will contact you to confirm the schedule after you submit."
+    "ONLINE PART-TIME & FULLTIME PROGRAMS\n\n" +
+    "Teaching on: Arabic Literacy · Learning Qur'an Recitation (with good tajweed) · " +
+    "Quranic Memorization · Fiqihu (Islamic Jurisprudence).\n\n" +
+    "We provide special classes for adults and children to learn on their paces.\n" +
+    "Connect Muslim with Quran Every Where You Go.\n\n" +
+    "Phone / WhatsApp: +234702633370"
   );
   form.setCollectEmail(true);
   form.setConfirmationMessage(
     "Jazakumullahu khayran! Your registration has been received. " +
-    "We will contact you shortly to confirm the class schedule."
+    "A coordinator from Ahlul Khair Foundation will contact you to confirm your class schedule."
   );
 
-  // ---------------- Section 1: Child (Student) Information ----------------
+  // ---------------- Section 1: Student Information ----------------
   form.addSectionHeaderItem()
-    .setTitle("Child (Student) Information")
-    .setHelpText("Tell us about the child who will be attending classes.");
+    .setTitle("Student Information")
+    .setHelpText("Classes are open to both adults and children.");
 
   form.addTextItem()
-    .setTitle("Child's full name")
+    .setTitle("Full name of student")
+    .setRequired(true);
+
+  form.addMultipleChoiceItem()
+    .setTitle("Student is a")
+    .setChoiceValues(["Child", "Adult"])
     .setRequired(true);
 
   form.addTextItem()
@@ -39,8 +50,8 @@ function createNoorAcademyForm() {
     .setRequired(true)
     .setValidation(
       FormApp.createTextValidation()
-        .setHelpText("Enter a whole number between 3 and 18.")
-        .requireNumberBetween(3, 18)
+        .setHelpText("Enter a whole number between 3 and 99.")
+        .requireNumberBetween(3, 99)
         .build()
     );
 
@@ -60,35 +71,57 @@ function createNoorAcademyForm() {
   form.addListItem()
     .setTitle("Preferred teaching language")
     .setChoiceValues([
-      "English", "Arabic", "Urdu / Hindi", "French",
-      "Somali", "Turkish", "Malay / Indonesian", "Other"
+      "English", "Arabic", "Hausa", "Yoruba",
+      "Urdu / Hindi", "French", "Somali", "Turkish", "Other"
+    ])
+    .setRequired(true);
+
+  // ---------------- Section 2: Programs ----------------
+  form.addPageBreakItem()
+    .setTitle("Programs")
+    .setHelpText("Choose one or more of the programs we teach.");
+
+  form.addCheckboxItem()
+    .setTitle("Program(s) you want to join")
+    .setChoiceValues([
+      "Arabic Literacy",
+      "Learning Qur'an Recitation (with good tajweed)",
+      "Quranic Memorization",
+      "Fiqihu (Islamic Jurisprudence)"
     ])
     .setRequired(true);
 
   form.addMultipleChoiceItem()
-    .setTitle("Current Qur'an / Islamic studies level")
+    .setTitle("Program type")
+    .setChoiceValues(["Part-time", "Full-time"])
+    .setRequired(true);
+
+  form.addMultipleChoiceItem()
+    .setTitle("Current level")
     .setChoiceValues([
       "Complete beginner (no Arabic letters yet)",
-      "Learning Qaida (alphabet & basic reading)",
-      "Can read Qur'an, needs Tajweed",
-      "Reading with Tajweed, wants to start Hifz",
-      "Currently memorising (Hifz) — continuing"
+      "Can read Arabic letters (Qaida level)",
+      "Can read Qur'an, needs tajweed",
+      "Reads Qur'an with good tajweed",
+      "Already memorizing (Hifz) — continuing"
     ])
     .setRequired(true);
 
   form.addParagraphTextItem()
-    .setTitle("Learning difficulties, health notes, or special needs (optional)");
+    .setTitle("Learning difficulties, health notes or special needs (optional)");
 
-  // ---------------- Section 2: Parent / Guardian Information ----------------
-  form.addPageBreakItem().setTitle("Parent / Guardian Information");
+  // ---------------- Section 3: Contact Person ----------------
+  form.addPageBreakItem()
+    .setTitle("Contact Person")
+    .setHelpText("For a child, this is the parent or guardian. For an adult student, enter your own details.");
 
   form.addTextItem()
-    .setTitle("Parent / guardian full name")
+    .setTitle("Full name")
     .setRequired(true);
 
   form.addMultipleChoiceItem()
-    .setTitle("Relationship to child")
-    .setChoiceValues(["Mother", "Father", "Guardian", "Other"])
+    .setTitle("Relationship to student")
+    .setChoiceValues(["Self (adult student)", "Mother", "Father", "Guardian", "Other"])
     .setRequired(true);
 
   form.addTextItem()
@@ -110,8 +143,10 @@ function createNoorAcademyForm() {
     .setChoiceValues(["WhatsApp", "Email", "Phone call", "SMS"])
     .setRequired(true);
 
-  // ---------------- Section 3: Schedule Preferences ----------------
-  form.addPageBreakItem().setTitle("Schedule Preferences");
+  // ---------------- Section 4: Class Schedule ----------------
+  form.addPageBreakItem()
+    .setTitle("Class Schedule")
+    .setHelpText("Times are in the student's own local time zone.");
 
   form.addCheckboxItem()
     .setTitle("Preferred days")
@@ -119,7 +154,7 @@ function createNoorAcademyForm() {
     .setRequired(true);
 
   form.addCheckboxItem()
-    .setTitle("Preferred time of day (child's own local time)")
+    .setTitle("Preferred time of day")
     .setChoiceValues([
       "Morning (6am–12pm)", "Afternoon (12pm–4pm)",
       "Evening (4pm–8pm)", "Night (8pm–11pm)"
@@ -128,7 +163,7 @@ function createNoorAcademyForm() {
 
   form.addMultipleChoiceItem()
     .setTitle("Hours per week")
-    .setChoiceValues(["1 hour", "2 hours", "3 hours", "4+ hours"])
+    .setChoiceValues(["1 hour", "2 hours", "3 hours", "4–6 hours", "7+ hours (full-time)"])
     .setRequired(true);
 
   form.addMultipleChoiceItem()
@@ -142,35 +177,32 @@ function createNoorAcademyForm() {
     .setRequired(true);
 
   form.addListItem()
-    .setTitle("Virtual class platform")
-    .setChoiceValues(["No preference", "Zoom", "Google Meet", "WhatsApp Video", "Microsoft Teams", "Other"]);
+    .setTitle("Class platform")
+    .setChoiceValues(["No preference", "WhatsApp Video", "Zoom", "Google Meet", "Microsoft Teams", "Other"]);
 
-  // ---------------- Section 4: Final Details ----------------
+  // ---------------- Section 5: Final Details ----------------
   form.addPageBreakItem().setTitle("Final Details");
 
   form.addMultipleChoiceItem()
     .setTitle("How did you hear about us?")
-    .setChoiceValues(["Friend / family", "Social media", "Mosque / community", "Other"]);
-
-  form.addTextItem()
-    .setTitle("Emergency contact name & number (optional)");
+    .setChoiceValues(["Friend / family", "Social media", "Mosque / community", "Flyer", "Other"]);
 
   form.addParagraphTextItem()
-    .setTitle("Anything else you'd like us to know? (optional)");
+    .setTitle("Any question or note (optional)");
 
   form.addCheckboxItem()
-    .setTitle("Consent")
+    .setTitle("Confirmation")
     .setChoiceValues([
-      "I confirm the information above is accurate and I give permission " +
-      "for my child to attend virtual Qur'an lessons."
+      "I confirm the information above is correct and I want to join the " +
+      "Ahlul Khair Foundation online classes."
     ])
     .setRequired(true);
 
   // ---------------- Linked response spreadsheet ----------------
-  var sheet = SpreadsheetApp.create("Noor Qur'an Academy — Responses");
+  var sheet = SpreadsheetApp.create("Ahlul Khair Foundation — Registrations");
   form.setDestination(FormApp.DestinationType.SPREADSHEET, sheet.getId());
 
-  Logger.log("Edit this form:      " + form.getEditUrl());
-  Logger.log("Share this link:     " + form.getPublishedUrl());
+  Logger.log("Edit this form:        " + form.getEditUrl());
+  Logger.log("Share this link:       " + form.getPublishedUrl());
   Logger.log("Responses spreadsheet: " + sheet.getUrl());
 }
